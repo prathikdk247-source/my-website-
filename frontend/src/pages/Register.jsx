@@ -10,16 +10,22 @@ const HERO_IMG = "https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?a
 export default function Register() {
   const { user, register } = useAuth();
   const nav = useNavigate();
-  const [form, setForm] = useState({ name: "", phone: "", email: "", password: "", role: "farmer", location: "" });
+  const [form, setForm] = useState({ name: "", phone: "", email: "", password: "" });
   const [showPw, setShowPw] = useState(false);
   const [err, setErr] = useState("");
   const [loading, setLoading] = useState(false);
 
   if (user) return <Navigate to="/" replace />;
 
+  const validatePhone = (v) => /^(?:\+?91[\s-]?)?[6-9]\d{9}$/.test(v.replace(/\s|-/g, ""));
+
   const submit = async (e) => {
     e.preventDefault();
     setErr("");
+    if (!validatePhone(form.phone)) {
+      setErr("Enter a valid Indian phone number (10 digits, starts with 6-9).");
+      return;
+    }
     setLoading(true);
     try {
       await register(form);
@@ -48,8 +54,8 @@ export default function Register() {
               <input className="input-field" data-testid="register-name" placeholder="Ravi Kumar"
                 value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
             </Field>
-            <Field label="Phone Number">
-              <input className="input-field" data-testid="register-phone" placeholder="+91 90000 00000"
+            <Field label="Phone Number (Indian)">
+              <input className="input-field" data-testid="register-phone" placeholder="+91 9876543210"
                 value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} required />
             </Field>
             <Field label="Email">
@@ -65,24 +71,6 @@ export default function Register() {
                   style={{ position: "absolute", right: 12, top: 12, background: "transparent", border: 0, color: "#7d8a82", cursor: "pointer" }}>
                   {showPw ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
-              </div>
-            </Field>
-            <Field label="I am a">
-              <div style={{ display: "flex", gap: 10 }}>
-                {["farmer", "buyer"].map((r) => (
-                  <button type="button" key={r}
-                    data-testid={`register-role-${r}`}
-                    onClick={() => setForm({ ...form, role: r })}
-                    style={{
-                      flex: 1, padding: "12px 14px", borderRadius: 12,
-                      border: `1px solid ${form.role === r ? "var(--ac-green-800)" : "var(--ac-line)"}`,
-                      background: form.role === r ? "var(--ac-green-100)" : "#fff",
-                      color: form.role === r ? "var(--ac-green-900)" : "var(--ac-muted)",
-                      fontWeight: 600, cursor: "pointer", textTransform: "capitalize",
-                    }}>
-                    {r}
-                  </button>
-                ))}
               </div>
             </Field>
 

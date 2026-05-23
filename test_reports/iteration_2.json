@@ -1,0 +1,45 @@
+{
+  "summary": "Full backend + frontend regression on the rewritten AgroConnect (AgroShops directory + Farmer Chat). 28/28 pytest assertions pass (auth incl. Indian phone validation & admin-email reserve; agroshops list/filter/admin gate; chat send/empty/oversize/non-data-url/delete-permissions). All required UI flows pass: Register Indian-phone client-side validation, farmer login -> /, admin nav hidden for farmer, /admin redirects farmer to /, all 4 /shops/<cat> render seeded cards with name/category/location/Call-now tel: link, /chat send-text + send-image + delete-own (hover-revealed) work, admin login shows Admin link, admin adds shop -> instantly appears on matching /shops/<cat> page. No critical bugs.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "POST /api/auth/register", "issue": "When phone regex fails Pydantic returns 422 (not 400). Spec said 'reject' so 422 is acceptable, but the frontend formatError must handle the 422 detail array."},
+      {"endpoint": "POST /api/agroshops", "issue": "AgroShopIn.contact has no format validation – any string accepted. Acceptable but could enforce Indian phone like RegisterIn does."},
+      {"endpoint": "POST /api/chat", "issue": "Size cap is ~1.5MB code-side while the frontend pickImage() pre-rejects at 900KB. Spec said ~1MB. Two different limits in two places; align them."},
+      {"endpoint": "GET /api/chat", "issue": "Hard cap of 1000 messages via .to_list(); no pagination. Fine now (0–few messages) but scale concern."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Chat", "issues": ["Chat bubble delete button uses display:none and only reveals on .bubble:hover (display:flex). On touch devices (mobile/tablet) there is no hover, so users may never see the delete affordance. Consider always-visible (low-opacity) trash icon or long-press."]},
+      {"screen": "TopBar", "issues": ["Many nav items + brand on a 1440px viewport packs tightly; on smaller screens (≈1280) the nav wraps. Horizontal scroll/snapping or hamburger at <=1024px recommended."]},
+      {"screen": "Admin", "issues": ["Form column uses sticky top:80; on shorter viewports the scrolling shop list under it overlaps slightly with sticky form bottom edge. Cosmetic."]}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/backend_test.py", "/app/test_reports/pytest/pytest_results.xml"],
+  "action_items": [
+    "Align chat image size cap: backend allows ~1.5MB, frontend rejects >900KB, spec says ~1MB. Pick one value and use it everywhere (and surface server error to user instead of swallowing it).",
+    "Make chat delete affordance visible on touch devices (drop hover-only display:none, or add a per-bubble menu).",
+    "Add Indian-phone validation to AgroShopIn.contact (admin currently can save any contact string).",
+    "Old /app/memory/test_credentials.md is stale (lists ‘buyer’ + old endpoints like /api/auth/logout that don’t exist). Update to: admin@agroconnect.in / Admin@2026 (admin) and ravi@agroconnect.in / Farm@123 (farmer)."
+  ],
+  "critical_code_review_comments": [
+    "server.py still uses deprecated @app.on_event('startup') – migrate to FastAPI lifespan ctx.",
+    "CORS allow_origins=['*'] with allow_credentials=False is acceptable for Bearer-token auth but should be locked to known origins before production.",
+    "JWT_SECRET is committed to backend/.env – fine for preview, rotate for prod.",
+    "Chat polling every 4s is heavy at scale – consider WebSocket or SSE for future iteration.",
+    "Chat.jsx uses optimistic append (setMsgs after POST) but the 4s poll will also re-fetch & may briefly duplicate the message if the poll fires between POST and the local append. Use the server response id to de-dupe on next poll (the current dedupe relies on full list replacement which works, but a momentary flicker is possible).",
+    "ShopsCategory cards do not show description even though backend stores it (verified via API). Consider rendering description on the card.",
+    "data-testid coverage is excellent across Register/Login/Admin/Chat/TopBar."
+  ],
+  "updated_files": ["/app/backend/tests/backend_test.py"],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "test_credentials": "Admin: admin@agroconnect.in / Admin@2026 (verified, role=admin). Farmer: ravi@agroconnect.in / Farm@123 (verified, role=farmer). NOTE: /app/memory/test_credentials.md contains STALE data from iteration_1 (mentions buyer@agroconnect.in and /api/auth/logout which no longer exist) – please update.",
+  "seed_data_creation": "Backend startup seeds 1 admin + 1 farmer + 8 agroshops (2 per category). Tests created a few TEST_/UI_TEST_/PLAYWRIGHT_ records during runs; all cleaned up post-test.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "REACT_APP_BACKEND_URL=https://farmer-hub-29.preview.emergentagent.com. Auth uses Bearer token via localStorage 'ac_token'. Register Indian-phone regex (server & client identical): ^(?:\\+?91[\\s-]?)?[6-9]\\d{9}$. Pydantic validation failures return 422, not 400 – tests must assert 422 for phone/email shape errors and 400 for business errors (duplicate, reserved, empty chat, oversize image). Chat delete button is display:none until .bubble:hover – use page.hover() or JS .click() in tests instead of force=True. /api/chat empty-message rejection requires BOTH text='' AND image=None. After admin POST /api/agroshops the new shop appears on /shops/<cat> immediately (no caching). To clean up, delete via DELETE /api/agroshops/{id} and DELETE /api/chat/{id} with admin token.",
+  "rca of the issue": "No outstanding bugs blocking the spec. The chat-delete-on-touch UX and the dual image-size cap are improvements rather than functional bugs."
+}

@@ -38,19 +38,12 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = async () => {
-    try { await api.post("/auth/logout"); } catch (_) {}
     localStorage.removeItem("ac_token");
     setUser(false);
   };
 
-  const updateMe = async (payload) => {
-    const { data } = await api.put("/auth/me", payload);
-    setUser(data);
-    return data;
-  };
-
   return (
-    <AuthContext.Provider value={{ user, setUser, login, register, logout, updateMe, loading }}>
+    <AuthContext.Provider value={{ user, setUser, login, register, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );
