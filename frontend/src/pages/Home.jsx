@@ -7,8 +7,8 @@ import { Sprout, FlaskConical, ShieldCheck, Tractor, MessageSquare, Shield, Leaf
 const CARDS = [
   { to: "/shops/seeds", icon: Sprout, title: "Seeds & Plants", desc: "Hybrid seeds, saplings & nursery stock from trusted shops.", color: "#1A6B3D", image: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&w=600&q=80" },
   { to: "/shops/fertilizers", icon: FlaskConical, title: "Fertilizers", desc: "Urea, DAP, NPK and organic compost suppliers.", color: "#0F4F2C", image: "https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?auto=format&fit=crop&w=600&q=80" },
-  { to: "/shops/pesticides", icon: ShieldCheck, title: "Pesticides", desc: "Bio-pesticides, insecticides and crop-care brands.", color: "#7a5a0e", image: "https://images.unsplash.com/photo-1574943320219-553eb213f72d?auto=format&fit=crop&w=600&q=80" },
-  { to: "/shops/equipment", icon: Tractor, title: "Equipment", desc: "Tractors, sprayers, drip kits & farm machinery.", color: "#0B3B23", image: "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?auto=format&fit=crop&w=600&q=80" },
+  { to: "/shops/pesticides", icon: ShieldCheck, title: "Pesticides", desc: "Bio-pesticides, insecticides and crop-care brands.", color: "#7a5a0e", image: "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?auto=format&fit=crop&w=600&q=80" },
+  { to: "/shops/equipment", icon: Tractor, title: "Equipment", desc: "Tractors, sprayers, drip kits & farm machinery.", color: "#0B3B23", image: "https://images.unsplash.com/photo-1574943320219-553eb213f72d?auto=format&fit=crop&w=600&q=80" },
 ];
 
 export default function Home() {

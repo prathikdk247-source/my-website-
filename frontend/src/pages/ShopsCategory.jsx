@@ -16,11 +16,11 @@ const META = {
   },
   pesticides: {
     label: "Pesticides", icon: ShieldCheck, color: "#7a5a0e", tag: "PESTICIDES",
-    image: "https://images.unsplash.com/photo-1574943320219-553eb213f72d?auto=format&fit=crop&w=1600&q=80",
+    image: "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?auto=format&fit=crop&w=1600&q=80",
   },
   equipment: {
     label: "Equipment", icon: Tractor, color: "#0B3B23", tag: "EQUIPMENT",
-    image: "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?auto=format&fit=crop&w=1600&q=80",
+    image: "https://images.unsplash.com/photo-1574943320219-553eb213f72d?auto=format&fit=crop&w=1600&q=80",
   },
 };
 
