@@ -1,0 +1,40 @@
+{
+  "summary": "Full backend + frontend regression complete for AgroConnect. 21/21 backend pytest assertions passed (auth, listings, posts/comments/likes, messages, users). 11/11 end-to-end UI flows passed: register, login (farmer & buyer), feed (post/like/comment), marketplace (list/category/search/create), profile edit, contact->message, logout, protected-route redirect. No critical issues.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "POST /api/listings", "issue": "Pydantic ListingIn does not validate that price/quantity are >= 0 (allows negative values). Low priority."},
+      {"endpoint": "GET /api/listings", "issue": "No pagination; .to_list(500) hard cap. Acceptable for current dataset but should paginate at scale."},
+      {"endpoint": "POST /api/auth/register", "issue": "EmailStr backed by email-validator rejects .test/.example TLDs (RFC2606). Tests must use real-looking TLDs (e.g. @agroconnect.in)."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Feed", "issues": ["When loading the page for a brand-new user, the 'No posts yet. Be the first to share!' empty-state can briefly flash before the GET /api/posts response renders (no loading skeleton). Cosmetic."]}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/backend_test.py", "/app/test_reports/pytest/pytest_results.xml"],
+  "action_items": [
+    "Optional: add min_value/positive constraints on ListingIn.price and ListingIn.quantity",
+    "Optional: add a loading skeleton on Feed/Marketplace while initial API call is in-flight (avoids brief empty-state flash)",
+    "Optional: clean up a stray 'x' test listing created during testing (1 leftover row in db.listings)"
+  ],
+  "critical_code_review_comments": [
+    "CORS: allow_credentials=False with allow_origins=['*'] is fine for Bearer-token auth, but set_auth_cookies() sets cookies with SameSite=None;Secure that the browser will accept but the frontend currently ignores (uses localStorage). The cookie path is dead code; either honour cookies in the frontend or remove set_auth_cookies to avoid confusion.",
+    "server.py uses deprecated @app.on_event('startup'/'shutdown'); migrate to FastAPI lifespan context to avoid future-version warnings.",
+    "Listing search uses unescaped regex from user input (q is passed directly into $regex). Add re.escape(q) before building the Mongo regex to avoid ReDoS and unexpected matches on special chars (e.g. q='(' would 500).",
+    "JWT secret is committed in backend/.env. Acceptable for preview, but ensure it is rotated for production.",
+    "Feed.jsx 'Posts' quick-stat reads posts.length before fetch resolves; render placeholder or skeleton.",
+    "data-testid coverage is excellent across all interactive elements."
+  ],
+  "updated_files": ["/app/backend/tests/backend_test.py", "/app/backend/tests/__init__.py"],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "test_credentials": "Farmer: ravi@agroconnect.in / Farm@123 (verified). Buyer: buyer@agroconnect.in / Buy@1234 (verified). /app/memory/test_credentials.md was not present.",
+  "seed_data_creation": "Backend seeds 2 users, 6 listings, 3 posts on startup. Tests created (and cleaned up) several TEST_ records; one stray 'x' listing remains.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Use REACT_APP_BACKEND_URL=https://farmer-hub-29.preview.emergentagent.com. Auth uses Bearer token via localStorage 'ac_token'. Backend also sets httpOnly cookies but frontend ignores them. After successful login the app redirects to '/' (Feed), NOT '/feed'. Email validator rejects .test/.example TLDs - use @agroconnect.in or similar. Marketplace listings API returns category=all as no-filter. When asserting listing counts in UI, wait for selector '[data-testid^=\"listing-\"]' rather than relying on URL change alone (timing).",
+  "rca of the issue": "No outstanding bugs."
+}
