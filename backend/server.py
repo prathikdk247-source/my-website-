@@ -333,7 +333,7 @@ async def chat_send(body: ChatIn, user: dict = Depends(get_current_user)):
         raise HTTPException(400, "Message is empty")
     if image and not image.startswith("data:image/"):
         raise HTTPException(400, "Image must be a data URL (data:image/...;base64,...)")
-    if image and len(image) > 1_500_000:  # ~1.1MB limit
+    if image and len(image) > 1_400_000:  # ~1MB after base64 expansion
         raise HTTPException(400, "Image too large (max ~1MB)")
     doc = {
         "id": str(uuid.uuid4()),

@@ -39,8 +39,8 @@ export default function Chat() {
   const pickImage = (e) => {
     const f = e.target.files?.[0];
     if (!f) return;
-    if (f.size > 900_000) {
-      alert("Image too large. Please pick one under 900 KB.");
+    if (f.size > 1_000_000) {
+      alert("Image too large. Please pick one under 1 MB.");
       e.target.value = "";
       return;
     }

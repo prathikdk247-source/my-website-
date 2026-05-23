@@ -1,45 +1,35 @@
 # AgroConnect — PRD
 
 ## Original Problem Statement
-AgroConnect — Farmer Network & Marketplace.
-User asked to recreate the website at https://farmer-network-1.preview.emergentagent.com/register.
-
-Reference description: "AgroConnect — a farmer-first marketplace and community chat for seeds, fertilizers, pesticides and farm equipment."
+Build AgroConnect — a farmer-first marketplace and community chat. Users register with **Name, Indian phone, Email, Password** and land on a Home page. Top navigation: **Admin · Home · About Us · Seeds/Plants · Fertilizers · Pesticides · Equipment · Chat**. **Fixed admin credentials** unlock an Admin panel where the admin adds AgroShop entries (Name, Category, Contact, Location); each entry appears as a card on the matching category page. A WhatsApp-style **Farmer group chat** allows all registered users to send & delete text messages and images; sender names are displayed automatically.
 
 ## Architecture
-- **Backend:** FastAPI (Python) + Motor (MongoDB), JWT auth (bcrypt + PyJWT), single `server.py`.
-- **Frontend:** React 19 (CRA + Craco), React Router v7, axios with Authorization Bearer header (token in localStorage).
-- **Design:** Earthy / agricultural green palette, Fraunces display + Plus Jakarta Sans sans-serif.
+- **Backend**: FastAPI + Motor (MongoDB), JWT (bcrypt + PyJWT). Single `server.py`.
+- **Frontend**: React 19 (CRA + Craco), React Router v7, axios with Authorization Bearer header (token in localStorage).
+- **Design**: Earthy / agricultural green palette, Fraunces (display) + Plus Jakarta Sans (sans).
 
 ## User Personas
-1. **Farmer** — lists produce/inputs, posts updates, replies to buyers.
-2. **Buyer** — searches marketplace, contacts sellers, joins community.
+1. **Farmer** — registers, browses AgroShops by category, calls them, chats with peers.
+2. **Admin** (fixed creds) — curates AgroShop directory & moderates chat.
 
-## Core Requirements
-- Email/password auth with two roles: farmer, buyer.
-- Marketplace listings across 4 categories: seeds, fertilizers, pesticides, equipment. Search + filter + create + delete (owner).
-- Community feed: post / like / comment / delete.
-- Direct messages between any two users; conversation list + thread view.
-- Profile: view + edit name/phone/location/bio; see own listings.
+## Fixed Admin Credentials
+`admin@agroconnect.in / Admin@2026` (role enforced via seed + `require_admin` dep).
 
 ## What's Been Implemented (2026-05-23)
-- JWT auth with two seeded demo users (farmer + buyer).
-- Full marketplace CRUD with category & search filters and 6 seeded listings.
-- Community feed with seeded posts, likes, comments, delete.
-- Direct messages: send, list conversations, view thread, auto-create when contacting from listing.
-- Profile view + edit, with own listings.
-- Split-screen auth pages (matching reference design), top-bar nav for the app shell.
-- 21/21 backend tests and 11/11 E2E UI flows passed (testing_agent iteration_1).
+- JWT auth with **Indian-phone validation** server- and client-side.
+- Admin email is reserved at signup.
+- 8 seeded AgroShops (2 per category) + Admin add/delete with admin-only gate.
+- Home page (greeting + 4 category cards + admin shortcut), About Us, four category pages (Seeds/Plants, Fertilizers, Pesticides, Equipment) showing shop cards (name, category chip, location, contact, description, Call-now tel link).
+- WhatsApp-style Farmer Chat: text + image (≤1 MB base64), delete own/admin-only-others, name & color-coded avatar per sender, 4s polling.
+- 28/28 backend pytest + all frontend E2E flows passed (iteration_2).
 
 ## Prioritized Backlog
-- **P1:** Loading skeletons on Feed/Marketplace to avoid empty-state flash.
-- **P1:** Escape regex in `q` search param (`re.escape`) to prevent ReDoS on special chars.
-- **P2:** Pagination on listings / posts.
-- **P2:** Image upload for listings & posts (currently none).
-- **P2:** AI crop advisor chatbot using Emergent LLM key.
-- **P2:** Real-time messaging (WebSocket) — currently polling-on-action.
-- **P3:** Migrate from `@app.on_event` to FastAPI lifespan context.
-- **P3:** Add positive-number validation on listing price/quantity.
+- **P1**: Replace 4s chat polling with WebSocket / SSE for real-time.
+- **P2**: Indian-phone validation on AgroShop `contact` field too.
+- **P2**: Hamburger / collapsible nav under 1024px width.
+- **P2**: Touch-friendly bubble delete (long-press menu).
+- **P3**: Pagination on `/api/chat`; lifespan ctx instead of `@app.on_event`.
+- **P3**: AI Crop Advisor chatbot (Emergent LLM key).
 
 ## Test Credentials
 See `/app/memory/test_credentials.md`.

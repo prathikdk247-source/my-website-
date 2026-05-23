@@ -75,7 +75,7 @@ export default function ShopsCategory() {
                 </div>
                 <div style={{ padding: 18 }}>
                   <h3 className="font-display" style={{ margin: 0, fontSize: 20, color: "var(--ac-green-900)" }}>{s.name}</h3>
-                  {s.description && <p style={{ marginTop: 6, color: "var(--ac-muted)", fontSize: 14 }}>{s.description}</p>}
+                  {s.description && <p style={{ marginTop: 8, color: "var(--ac-muted)", fontSize: 14, lineHeight: 1.45 }}>{s.description}</p>}
                   <div style={{ marginTop: 12, display: "grid", gap: 6, fontSize: 14, color: "var(--ac-ink)" }}>
                     <div style={{ display: "flex", gap: 8, alignItems: "center" }}><MapPin size={14} color="var(--ac-green-800)" /> {s.location}</div>
                     <div style={{ display: "flex", gap: 8, alignItems: "center" }}><Phone size={14} color="var(--ac-green-800)" /> {s.contact}</div>
