@@ -6,10 +6,22 @@ import { useAuth } from "../AuthContext";
 import { MapPin, Phone, Sprout, FlaskConical, ShieldCheck, Tractor, Trash2 } from "lucide-react";
 
 const META = {
-  seeds: { label: "Seeds & Plants", icon: Sprout, color: "#1A6B3D", tag: "SEEDS" },
-  fertilizers: { label: "Fertilizers", icon: FlaskConical, color: "#0F4F2C", tag: "FERTILIZERS" },
-  pesticides: { label: "Pesticides", icon: ShieldCheck, color: "#7a5a0e", tag: "PESTICIDES" },
-  equipment: { label: "Equipment", icon: Tractor, color: "#0B3B23", tag: "EQUIPMENT" },
+  seeds: {
+    label: "Seeds & Plants", icon: Sprout, color: "#1A6B3D", tag: "SEEDS",
+    image: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&w=1600&q=80",
+  },
+  fertilizers: {
+    label: "Fertilizers", icon: FlaskConical, color: "#0F4F2C", tag: "FERTILIZERS",
+    image: "https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?auto=format&fit=crop&w=1600&q=80",
+  },
+  pesticides: {
+    label: "Pesticides", icon: ShieldCheck, color: "#7a5a0e", tag: "PESTICIDES",
+    image: "https://images.unsplash.com/photo-1574943320219-553eb213f72d?auto=format&fit=crop&w=1600&q=80",
+  },
+  equipment: {
+    label: "Equipment", icon: Tractor, color: "#0B3B23", tag: "EQUIPMENT",
+    image: "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?auto=format&fit=crop&w=1600&q=80",
+  },
 };
 
 export default function ShopsCategory() {
@@ -41,18 +53,23 @@ export default function ShopsCategory() {
     <div className="app-shell">
       <TopBar />
       <div className="container">
-        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-          <div style={{ width: 56, height: 56, borderRadius: 16, background: meta.color, display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
-            <Icon size={26} color="#fff" />
-          </div>
-          <div>
-            <div style={{ fontSize: 12, letterSpacing: ".2em", color: "var(--ac-muted)" }}>{meta.tag}</div>
-            <h1 className="font-display" style={{ fontSize: 38, margin: "4px 0 0", color: "var(--ac-green-900)" }}>{meta.label}</h1>
+        <div className="category-hero" style={{ backgroundImage: `url(${meta.image})` }} data-testid="category-hero">
+          <div className="category-hero-overlay" style={{ background: `linear-gradient(120deg, ${meta.color}E0 0%, ${meta.color}80 60%, rgba(11,59,35,0.20) 100%)` }} />
+          <div className="category-hero-content">
+            <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+              <div style={{ width: 56, height: 56, borderRadius: 16, background: "rgba(255,255,255,0.18)", border: "1px solid rgba(255,255,255,0.32)", backdropFilter: "blur(8px)", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
+                <Icon size={26} color="#fff" />
+              </div>
+              <div>
+                <div style={{ fontSize: 12, letterSpacing: ".2em", color: "rgba(255,255,255,0.85)" }}>{meta.tag}</div>
+                <h1 className="font-display" style={{ fontSize: 40, margin: "4px 0 0", color: "#fff", fontWeight: 900 }}>{meta.label}</h1>
+              </div>
+            </div>
+            <p style={{ color: "rgba(255,255,255,0.92)", marginTop: 12, maxWidth: 560, fontSize: 15 }}>
+              Verified AgroShops for {meta.label.toLowerCase()} across India. Admin-curated — pick a shop and reach out directly.
+            </p>
           </div>
         </div>
-        <p style={{ color: "var(--ac-muted)", marginTop: 10 }}>
-          Verified AgroShops for {meta.label.toLowerCase()} across India. Admin-curated — pick a shop and reach out directly.
-        </p>
 
         {loading ? (
           <div className="card" style={{ padding: 28, marginTop: 24, color: "var(--ac-muted)", textAlign: "center" }}>Loading shops...</div>
@@ -69,8 +86,8 @@ export default function ShopsCategory() {
           }}>
             {shops.map((s) => (
               <div key={s.id} className="shop-card" data-testid={`shop-${s.id}`}>
-                <div className="shop-card-banner" style={{ background: `linear-gradient(135deg, ${meta.color}, var(--ac-green-700))` }}>
-                  <Icon size={28} color="#fff" />
+                <div className="shop-card-banner" style={{ backgroundImage: `linear-gradient(135deg, ${meta.color}D9, ${meta.color}99), url(${meta.image})` }}>
+                  <Icon size={32} color="#fff" />
                   <span className="chip" style={{ background: "rgba(255,255,255,.18)", color: "#fff", border: "1px solid rgba(255,255,255,.28)", textTransform: "capitalize" }}>{s.category}</span>
                 </div>
                 <div style={{ padding: 18 }}>

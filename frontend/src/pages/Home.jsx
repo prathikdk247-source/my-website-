@@ -5,10 +5,10 @@ import { useAuth } from "../AuthContext";
 import { Sprout, FlaskConical, ShieldCheck, Tractor, MessageSquare, Shield, Leaf } from "lucide-react";
 
 const CARDS = [
-  { to: "/shops/seeds", icon: Sprout, title: "Seeds & Plants", desc: "Hybrid seeds, saplings & nursery stock from trusted shops.", color: "#1A6B3D" },
-  { to: "/shops/fertilizers", icon: FlaskConical, title: "Fertilizers", desc: "Urea, DAP, NPK and organic compost suppliers.", color: "#0F4F2C" },
-  { to: "/shops/pesticides", icon: ShieldCheck, title: "Pesticides", desc: "Bio-pesticides, insecticides and crop-care brands.", color: "#7a5a0e" },
-  { to: "/shops/equipment", icon: Tractor, title: "Equipment", desc: "Tractors, sprayers, drip kits & farm machinery.", color: "#0B3B23" },
+  { to: "/shops/seeds", icon: Sprout, title: "Seeds & Plants", desc: "Hybrid seeds, saplings & nursery stock from trusted shops.", color: "#1A6B3D", image: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&w=600&q=80" },
+  { to: "/shops/fertilizers", icon: FlaskConical, title: "Fertilizers", desc: "Urea, DAP, NPK and organic compost suppliers.", color: "#0F4F2C", image: "https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?auto=format&fit=crop&w=600&q=80" },
+  { to: "/shops/pesticides", icon: ShieldCheck, title: "Pesticides", desc: "Bio-pesticides, insecticides and crop-care brands.", color: "#7a5a0e", image: "https://images.unsplash.com/photo-1574943320219-553eb213f72d?auto=format&fit=crop&w=600&q=80" },
+  { to: "/shops/equipment", icon: Tractor, title: "Equipment", desc: "Tractors, sprayers, drip kits & farm machinery.", color: "#0B3B23", image: "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?auto=format&fit=crop&w=600&q=80" },
 ];
 
 export default function Home() {
@@ -45,10 +45,14 @@ export default function Home() {
         }}>
           {CARDS.map((c) => (
             <Link key={c.to} to={c.to} className="cat-card" data-testid={`home-card-${c.title.split(" ")[0].toLowerCase()}`}>
-              <div className="cat-card-icon" style={{ background: c.color }}><c.icon size={22} color="#fff" /></div>
-              <h3 className="font-display" style={{ margin: "12px 0 4px", fontSize: 22, color: "var(--ac-green-900)" }}>{c.title}</h3>
-              <p style={{ margin: 0, color: "var(--ac-muted)", fontSize: 14 }}>{c.desc}</p>
-              <div style={{ marginTop: 14, color: "var(--ac-green-800)", fontWeight: 700, fontSize: 14 }}>Explore shops →</div>
+              <div className="cat-card-image" style={{ backgroundImage: `linear-gradient(180deg, rgba(11,59,35,0.05) 0%, rgba(11,59,35,0.45) 100%), url(${c.image})` }}>
+                <div className="cat-card-icon" style={{ background: c.color }}><c.icon size={20} color="#fff" /></div>
+              </div>
+              <div style={{ padding: "16px 18px 18px" }}>
+                <h3 className="font-display" style={{ margin: 0, fontSize: 22, color: "var(--ac-green-900)" }}>{c.title}</h3>
+                <p style={{ margin: "6px 0 0", color: "var(--ac-muted)", fontSize: 14 }}>{c.desc}</p>
+                <div style={{ marginTop: 12, color: "var(--ac-green-800)", fontWeight: 700, fontSize: 14 }}>Explore shops →</div>
+              </div>
             </Link>
           ))}
         </div>

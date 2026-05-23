@@ -124,7 +124,25 @@ button { font-family: inherit; }
 .brandbar .dot { width: 28px; height: 28px; border-radius: 8px; background: var(--ac-green-800); display:inline-flex; align-items:center; justify-content:center; color:#fff; }
 
 /* Navigation (main app) */
-.app-shell { min-height: 100vh; background: var(--ac-bg); }
+.app-shell { min-height: 100vh; background: var(--ac-bg); position: relative; }
+.app-shell::before {
+  content: "";
+  position: fixed; inset: 0;
+  background-image: url("https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&w=2400&q=80");
+  background-size: cover; background-position: center; background-repeat: no-repeat;
+  background-attachment: fixed;
+  opacity: 0.18;
+  pointer-events: none;
+  z-index: 0;
+}
+.app-shell::after {
+  content: "";
+  position: fixed; inset: 0;
+  background: linear-gradient(180deg, rgba(244,244,239,0.70) 0%, rgba(244,244,239,0.88) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+.app-shell > * { position: relative; z-index: 1; }
 .topbar {
   position: sticky; top:0; z-index: 30;
   background: rgba(244,244,239,0.85);
@@ -219,14 +237,37 @@ button { font-family: inherit; }
   background: #fff;
   border: 1px solid var(--ac-line);
   border-radius: 18px;
-  padding: 20px;
+  overflow: hidden;
   transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
 }
-.cat-card:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(11,59,35,.10); border-color: var(--ac-green-200); }
-.cat-card-icon {
-  width: 48px; height: 48px; border-radius: 14px;
-  display: inline-flex; align-items: center; justify-content: center;
+.cat-card:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(11,59,35,.12); border-color: var(--ac-green-200); }
+.cat-card-image {
+  height: 140px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
 }
+.cat-card-icon {
+  position: absolute; left: 16px; bottom: -20px;
+  width: 44px; height: 44px; border-radius: 12px;
+  display: inline-flex; align-items: center; justify-content: center;
+  box-shadow: 0 6px 18px rgba(11,59,35,.25);
+  border: 2px solid #fff;
+}
+
+/* Category hero banner with image */
+.category-hero {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  min-height: 220px;
+  background-size: cover;
+  background-position: center;
+  margin-bottom: 24px;
+  box-shadow: 0 10px 30px rgba(11,59,35,.12);
+}
+.category-hero-overlay { position: absolute; inset: 0; }
+.category-hero-content { position: relative; z-index: 2; padding: 40px 36px; }
 
 /* Shop card on category page */
 .shop-card {
@@ -235,9 +276,12 @@ button { font-family: inherit; }
 }
 .shop-card:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(11,59,35,.08); border-color: var(--ac-green-200); }
 .shop-card-banner {
+  height: 110px;
   padding: 22px;
   display: flex; align-items: center; justify-content: space-between;
   color: #fff;
+  background-size: cover;
+  background-position: center;
 }
 
 /* WhatsApp-style chat */
